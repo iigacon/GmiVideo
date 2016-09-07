@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">GMI Video</string>
+    <string name="abc">abc</string>
+    <string name="play_trailer">Play Trailer</string>
+    <string name="title_detail">Details</string>
+    <string name="genre">Genre</string>
+    <string name="tagline">Tagline</string>
+    <string name="cast">Billed Cast</string>
+    <string name="crew">Billed Crew</string>
+    <string name="similar">More Like This</string>
+    <string name="count_video">Videos</string>
+    <string name="count_image">Images</string>
+    <string name="search_hint">Search</string>
+    <string name="company">Production Companies</string>
+    <string name="budget">Budget</string>
+    <string name="revenue">Revenue</string>
+</resources>
