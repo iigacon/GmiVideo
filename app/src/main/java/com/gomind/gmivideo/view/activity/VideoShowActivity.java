@@ -9,10 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.gomind.gmivideo.R;
-import com.gomind.gmivideo.view.adapter.ImageAdapter;
+import com.gomind.gmivideo.view.adapter.VideoAdapter;
 
 import org.parceler.Parcels;
 
@@ -21,28 +20,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ImageShowActivity extends AppCompatActivity {
+public class VideoShowActivity extends AppCompatActivity {
     @BindView(R.id.toolbar_ImageShow)
     Toolbar toolbar;
     @BindView(R.id.grid_image)
     RecyclerView grid_image;
-    private List<Image> images;
+    private List<Video> videos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_show);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        images=Parcels.unwrap(getIntent().getParcelableExtra("list.image"));
+        videos=Parcels.unwrap(getIntent().getParcelableExtra("list.image"));
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
         GridLayoutManager glayout=new GridLayoutManager(this, 3);
-        if(images!=null) {
-            ImageAdapter imageAdapter = new ImageAdapter(images, this, image_path -> {
-                //TODO
-                Toast.makeText(ImageShowActivity.this, image_path, Toast.LENGTH_SHORT).show();
+        if(videos!=null) {
+            VideoAdapter imageAdapter = new VideoAdapter(videos, this, image_path -> {
+                Intent intent=new Intent(this,PlayerViewDemoActivity.class);
+                intent.putExtra("idYoutube",image_path);
+                startActivity(intent);
             });
             grid_image.setAdapter(imageAdapter);
         }
@@ -71,9 +71,9 @@ public class ImageShowActivity extends AppCompatActivity {
             default: return false;
         }
     }
-    public static void start(Context context, List<Image> images){
-        Intent intent=new Intent(context,ImageShowActivity.class);
-        intent.putExtra("list.image", Parcels.wrap(images));
+    public static void start(Context context, List<Video> videos){
+        Intent intent=new Intent(context,VideoShowActivity.class);
+        intent.putExtra("list.image", Parcels.wrap(videos));
         context.startActivity(intent);
     }
 

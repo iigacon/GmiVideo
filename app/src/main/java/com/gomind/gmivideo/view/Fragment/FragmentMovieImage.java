@@ -35,7 +35,6 @@ public class FragmentMovieImage extends Fragment {
                 .load(image_link)
                 .crossFade()
                 .into(imageView);
-        System.out.println("Load image: "+image_link);
         return view;
     }
 }

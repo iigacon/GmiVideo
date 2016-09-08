@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements MoviePopularView{
                 )
                 .withOnDrawerItemClickListener((view, position, drawerItem) -> {
                             Toast.makeText(MainActivity.this, position+"", Toast.LENGTH_SHORT).show();
-                            return true;
+                            return false;
                 })
                 .build();
         movieRecycler = (RecyclerView) findViewById(R.id.activity_avengers_recycler);
@@ -92,9 +92,7 @@ public class MainActivity extends AppCompatActivity implements MoviePopularView{
                 .build().inject(this);
         moviePopularPresenter.attachView(this);
         moviePopularPresenter.onCreate();
-        movieRecycler.setLayoutManager(new LinearLayoutManager(this));
-        movieRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
-        movieRecycler.addOnScrollListener(mOnScrollListener);
+
     }
 
     private OnScrollListener mOnScrollListener=new OnScrollListener() {
@@ -114,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements MoviePopularView{
     public void bindMoviePopular(List<Movie> movies) {
         moviePopularAdapter = new MoviePopularAdapter(movies, this, (position, sharedView, characterImageView) -> moviePopularPresenter.onElementClick(position));
         movieRecycler.setAdapter(moviePopularAdapter);
+        movieRecycler.setLayoutManager(new LinearLayoutManager(this));
+        movieRecycler.addItemDecoration(new RecyclerInsetsDecoration(this));
+        movieRecycler.addOnScrollListener(mOnScrollListener);
     }
 
     @Override

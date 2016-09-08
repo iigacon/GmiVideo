@@ -62,7 +62,6 @@ public class MovieSimilarAdapter extends RecyclerView.Adapter<MovieSimilarAdapte
        public MyViewHolder(View itemView, RecyclerMovieSimilarClickListener movieSimilarClickListener) {
            super(itemView);
            ButterKnife.bind(this,itemView);
-//           bindClick(itemView,movieSimilarClickListener);
            title.setOnClickListener(v->movieSimilarClickListener.onElementClick(getPosition(),movieSimilars.get(getPosition()).getId()));
            poster.setOnClickListener(v->movieSimilarClickListener.onElementClick(getPosition(),movieSimilars.get(getPosition()).getId()));
        }
@@ -73,9 +72,6 @@ public class MovieSimilarAdapter extends RecyclerView.Adapter<MovieSimilarAdapte
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(poster);
-        }
-        public void bindClick(View itemView, RecyclerMovieSimilarClickListener movieSimilarClickListener){
-            itemView.setOnClickListener(v -> movieSimilarClickListener.onElementClick(getPosition(),movieSimilars.get(getPosition()).getId()));
         }
    }
 }

@@ -39,6 +39,7 @@ import com.gomind.gmivideo.Injector.Module.MovieImageModule;
 import com.gomind.gmivideo.Injector.Module.MovieSimilarModule;
 import com.gomind.gmivideo.Injector.Module.MovieVideoModule;
 import com.gomind.gmivideo.R;
+import com.gomind.gmivideo.mapper.MapperData;
 import com.gomind.gmivideo.view.Fragment.FragmentMovieImage;
 import com.gomind.gmivideo.view.adapter.CastAdapter;
 import com.gomind.gmivideo.view.adapter.CrewAdapter;
@@ -60,13 +61,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Duc on 9/4/16.
- */
-public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView{
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
     private String idMovie;
-    private List<Video> videos;
-    @Inject MovieDetailPresenter movieDetailPresenter;
+    @Inject
+    MovieDetailPresenter movieDetailPresenter;
     @Inject
     MovieSimilarPresenter movieSimilarPresenter;
     @Inject
@@ -75,8 +73,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     MovieVideoPresenter movieVideoPresenter;
     @Inject
     MovieCreditPresenter movieCreditPresenter;
-    private MovieDetail movieDetail;
-//    private ImageView imageView;
     private TextView movie_info;
     private TextView play_trailer;
     private CollapsingToolbarLayout collapsingToolbar;
@@ -105,14 +101,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     RecyclerView recyclerView_Crew;
     @BindView(R.id.movie_similar_recycler)
     RecyclerView recyclerView_Similar;
-    @BindView(R.id.movie_revenue) TextView revenue;
-    @BindView(R.id.movie_company) TextView company;
-    @BindView(R.id.movie_budget) TextView budget;
+    @BindView(R.id.movie_revenue)
+    TextView revenue;
+    @BindView(R.id.movie_company)
+    TextView company;
+    @BindView(R.id.movie_budget)
+    TextView budget;
     MovieSimilarAdapter similarAdapter;
     CastAdapter castAdapter;
     CrewAdapter crewAdapter;
     private String key_youtube;
+    LinearLayoutManager layoutManager;
+    LinearLayoutManager layoutManager2;
+    LinearLayoutManager layoutManager3;
+
     private List<com.gomind.gmivideo.view.activity.Image> images_fake;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,56 +124,53 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         ButterKnife.bind(this);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        idMovie=getIntent().getStringExtra("movie.id");
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        idMovie = getIntent().getStringExtra("movie.id");
         initilizeInjector();
-//        imageView= (ImageView) findViewById(R.id.backdrop);
-        movie_info= (TextView) findViewById(R.id.movie_info);
-        play_trailer= (TextView) findViewById(R.id.play_trailer);
+        movie_info = (TextView) findViewById(R.id.movie_info);
+        play_trailer = (TextView) findViewById(R.id.play_trailer);
         play_trailer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.play, 0, 0, 0);
-        play_trailer.setOnClickListener(v->play());
+        play_trailer.setOnClickListener(v -> play());
         collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setCollapsedTitleTextColor(Color.TRANSPARENT);
         collapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);
-        movieName= (TextView) findViewById(R.id.title_movie);
-        viewPager= (ViewPager) findViewById(R.id.viewpager);
-        image_poster= (ImageView) findViewById(R.id.movie_poster);
-        rate= (TextView) findViewById(R.id.movie_rate);
-        rate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rate,0,0,0);
-        review= (TextView) findViewById(R.id.movie_review);
-        review.setCompoundDrawablesWithIntrinsicBounds(R.drawable.date,0,0,0);
-        runtime= (TextView) findViewById(R.id.movie_runtime);
-        runtime.setCompoundDrawablesWithIntrinsicBounds(R.drawable.timer,0,0,0);
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView_Cast.setLayoutManager(layoutManager);
-        LinearLayoutManager layoutManager2
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView_Crew.setLayoutManager(layoutManager2);
-        LinearLayoutManager layoutManager3
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView_Similar.setLayoutManager(layoutManager3);
+        movieName = (TextView) findViewById(R.id.title_movie);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        image_poster = (ImageView) findViewById(R.id.movie_poster);
+        rate = (TextView) findViewById(R.id.movie_rate);
+        rate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rate, 0, 0, 0);
+        review = (TextView) findViewById(R.id.movie_review);
+        review.setCompoundDrawablesWithIntrinsicBounds(R.drawable.date, 0, 0, 0);
+        runtime = (TextView) findViewById(R.id.movie_runtime);
+        runtime.setCompoundDrawablesWithIntrinsicBounds(R.drawable.timer, 0, 0, 0);
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        layoutManager3 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
     }
-    public void play(){
+
+    public void play() {
         Intent characterDetailItent = new Intent(this, PlayerViewDemoActivity.class);
         characterDetailItent.putExtra("idYoutube", key_youtube);
         startActivity(characterDetailItent);
     }
+
     public static void start(Context context, String movieId) {
         Intent characterDetailItent = new Intent(context, MovieDetailActivity.class);
         characterDetailItent.putExtra("movie.id", movieId);
         context.startActivity(characterDetailItent);
     }
 
-    private void initilizeInjector(){
+    private void initilizeInjector() {
         GmiVideoApplication avengersApplication = (GmiVideoApplication) getApplication();
         DaggerMovieDetailComponent.builder()
                 .activityModule(new ActivityModule(this))
                 .appComponent(avengersApplication.getAppComponent())
                 .movieDetailModule(new MovieDetailModule(idMovie))
                 .movieImageModule(new MovieImageModule(idMovie))
-                .movieSimilarModule(new MovieSimilarModule(0,idMovie))
+                .movieSimilarModule(new MovieSimilarModule(0, idMovie))
                 .movieVideoModule(new MovieVideoModule(idMovie))
                 .movieCreditModule(new MovieCreditModule(idMovie))
                 .build().inject(this);
@@ -184,92 +185,94 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         movieCreditPresenter.attachView(this);
         movieCreditPresenter.onCreate();
     }
+
     @Override
     public void bindMovieDetail(MovieDetail movieDetail) {
-        this.movieDetail=movieDetail;
         Glide.with(this)
-                .load("http://image.tmdb.org/t/p/w500"+movieDetail.getPoster_path())
+                .load("http://image.tmdb.org/t/p/w500" + movieDetail.getPoster_path())
                 .crossFade()
                 .into(image_poster);
         movieName.setText(movieDetail.getTitle());
         movie_info.setText(movieDetail.getOverview());
 
-        rate.setText(String.valueOf(movieDetail.getVote_average())+"/10\n"+String.valueOf(movieDetail.getVote_count()));
-        runtime.setText("Runtime\n"+String.valueOf(movieDetail.getRuntime())+" min");
-        review.setText("Release Date\n"+String.valueOf(movieDetail.getRelease_date()));
-        String genre="";
+        rate.setText(String.valueOf(movieDetail.getVote_average()) + "/10\n" + String.valueOf(movieDetail.getVote_count()));
+        runtime.setText("Runtime\n" + String.valueOf(movieDetail.getRuntime()) + " min");
+        review.setText("Release Date\n" + String.valueOf(movieDetail.getRelease_date()));
+        String genre = "";
 
         movie_tagline.setText(movieDetail.getTagline());
         revenue.setText(movieDetail.getRevenue());
         budget.setText(movieDetail.getBudget());
         Glide.with(this)
-                .load("http://image.tmdb.org/t/p/w500"+movieDetail.getBackdrop_path())
+                .load("http://image.tmdb.org/t/p/w500" + movieDetail.getBackdrop_path())
                 .crossFade()
                 .into(image_images);
-        for(Genres s:movieDetail.getGenres()){
-            genre+=s.getName()+", ";
+        for (Genres s : movieDetail.getGenres()) {
+            genre += s.getName() + ", ";
         }
         movie_genre.setText(genre);
-        String companyString="";
-        for(Company c:movieDetail.getProduction_companies()){
-            companyString+=c.getName()+", ";
+        String companyString = "";
+        for (Company c : movieDetail.getProduction_companies()) {
+            companyString += c.getName() + ", ";
         }
         company.setText(companyString);
     }
 
     @Override
     public void bindMovieSimilar(List<MovieSimilar> movieSimilars) {
-        similarAdapter=new MovieSimilarAdapter(movieSimilars,this,((position, idMovie1) -> {
-            MovieDetailActivity.start(this,idMovie1);
-            Toast.makeText(MovieDetailActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
-        }));
+        similarAdapter = new MovieSimilarAdapter(movieSimilars, this, ((position, idMovie1) -> MovieDetailActivity.start(this, idMovie1)));
         recyclerView_Similar.setAdapter(similarAdapter);
+        recyclerView_Similar.setLayoutManager(layoutManager3);
     }
 
     @Override
     public void bindMovieImage(List<Image> images) {
-        this.images=images;
+        this.images = images;
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        for(Image m: images){
-            adapter.addFragment(new FragmentMovieImage().instance("http://image.tmdb.org/t/p/w780"+m.getFile_path()));
+        for (Image m : images) {
+            adapter.addFragment(new FragmentMovieImage().instance("http://image.tmdb.org/t/p/w780" + m.getFile_path()));
         }
         viewPager.setAdapter(adapter);
         pageSwitcher(10);
-        count_images.setText(("Images("+images.size()+1+")"));
-        images_fake=images;
-        image_images.setOnClickListener(v->{
-            ImageShowActivity.start(this,images);
-        });
-        count_images.setOnClickListener(v->{
-            ImageShowActivity.start(this, images);
-        });
+        String count_image = "Images(" + String.valueOf(images.size()) + ")";
+        count_images.setText(count_image);
+        images_fake = MapperData.MapperImages(images);
+        image_images.setOnClickListener(v -> ImageShowActivity.start(this, images_fake));
+        count_images.setOnClickListener(v -> ImageShowActivity.start(this, images_fake));
     }
 
     @Override
     public void playYoutubeTrailer(List<Video> videoTrailer) {
-        for(Video v:videoTrailer){
-            if(v.getType().equals("Trailer")){
-                key_youtube=v.getKey();
+        for (Video v : videoTrailer) {
+            if (v.getType().equals("Trailer")) {
+                key_youtube = v.getKey();
                 break;
             }
         }
         Glide.with(this)
-                .load("http://img.youtube.com/vi/"+key_youtube+"/mqdefault.jpg")
+                .load("http://img.youtube.com/vi/" + key_youtube + "/mqdefault.jpg")
                 .crossFade()
                 .into(image_videos);
-        count_videos.setText("Videos("+videoTrailer.size()+1+")");
+        String count_video = "Videos(" + String.valueOf(videoTrailer.size()) + ")";
+        count_videos.setText(count_video);
+        count_videos.setOnClickListener(v -> VideoShowActivity.start(this, MapperData.MapperVideos(videoTrailer)));
+        image_videos.setOnClickListener(v -> VideoShowActivity.start(this, MapperData.MapperVideos(videoTrailer)));
     }
 
     @Override
     public void bindCreditMovie(Credits credits) {
-        castAdapter=new CastAdapter(credits.getCast(),this,(position, shareView, movieImageView) -> {
+        castAdapter = new CastAdapter(credits.getCast(), this, (position, shareView, movieImageView) -> {
+            //TODO
             Toast.makeText(MovieDetailActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
         });
         recyclerView_Cast.setAdapter(castAdapter);
-        crewAdapter=new CrewAdapter(credits.getCrew(),this,(position, idCrew) -> {
+        recyclerView_Cast.setLayoutManager(layoutManager);
+        crewAdapter = new CrewAdapter(credits.getCrew(), this, (position, idCrew) -> {
+            //TODO
             Toast.makeText(MovieDetailActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
         });
         recyclerView_Crew.setAdapter(crewAdapter);
+        recyclerView_Crew.setLayoutManager(layoutManager2);
     }
 
     @Override
@@ -281,9 +284,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public void imageMovie(String idMovie) {
 
     }
+
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
 
         public Adapter(FragmentManager fm) {
             super(fm);
@@ -305,9 +308,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+            return "";
         }
     }
+
     Timer timer;
 
     public void pageSwitcher(int seconds) {
@@ -316,18 +320,19 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     class RemindTask extends TimerTask {
-        boolean first=false;
+        boolean first = false;
+
         @Override
         public void run() {
             runOnUiThread(() -> {
-                int page=viewPager.getCurrentItem();
-                if(!viewPager.isShown()){
+                int page = viewPager.getCurrentItem();
+                if (!viewPager.isShown()) {
                     timer.cancel();
                 }
-                if(page==0&!first){
-                    first=true;
+                if (page == 0 & !first) {
+                    first = true;
 
-                }else {
+                } else {
                     if (page >= images.size() - 1) {
                         page = 0;
                         viewPager.setCurrentItem(page);
@@ -343,7 +348,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.detail_menu,menu);
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
 //        SearchManager searchManager =
 //                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
@@ -359,19 +364,20 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 onBackPressed();
                 return false;
             }
-            case R.id.action_share:{
+            case R.id.action_share: {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v="+key_youtube);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "https://www.youtube.com/watch?v=" + key_youtube);
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
-            default: return false;
+            default:
+                return false;
         }
     }
 

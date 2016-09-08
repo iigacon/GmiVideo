@@ -1,6 +1,7 @@
 package com.gomind.gmivideo.view.activity;
 
 import org.parceler.Parcel;
+import org.parceler.ParcelConstructor;
 
 /**
  * Created by Duc on 8/28/16.
@@ -14,7 +15,7 @@ public class Image {
     private float aspect_ratio;
     private float vote_average;
     private int vote_count;
-
+    @ParcelConstructor
     public Image(String file_path, int width, int height, String iso_639_1, float aspect_ratio, float vote_average, int vote_count) {
         this.file_path = file_path;
         this.width = width;

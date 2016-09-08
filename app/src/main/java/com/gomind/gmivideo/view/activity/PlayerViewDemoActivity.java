@@ -17,6 +17,7 @@
 package com.gomind.gmivideo.view.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.gomind.gmivideo.R;
 import com.google.android.youtube.player.YouTubeBaseActivity;

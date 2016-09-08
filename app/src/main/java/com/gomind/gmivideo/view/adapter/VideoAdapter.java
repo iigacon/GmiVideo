@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.gomind.gmivideo.R;
-import com.gomind.gmivideo.view.activity.Image;
+import com.gomind.gmivideo.view.activity.Video;
 import com.gomind.gmivideo.vmp.ulti.RecyclerImageClickListiner;
 
 import java.util.List;
@@ -17,15 +17,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Duc on 9/7/16.
- */
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder>{
-    private List<Image> images;
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.MyViewHolder>{
+    private List<Video> videos;
     private Context context;
     private RecyclerImageClickListiner imageClickListiner;
-    public ImageAdapter(List<Image> images, Context context, RecyclerImageClickListiner imageClickListiner) {
-        this.images = images;
+    public VideoAdapter(List<Video> videos, Context context, RecyclerImageClickListiner imageClickListiner) {
+        this.videos = videos;
         this.context = context;
         this.imageClickListiner = imageClickListiner;
     }
@@ -38,12 +35,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bindImage(images.get(position));
+        holder.bindVideo(videos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
+        return videos.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -55,13 +52,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
             ButterKnife.bind(this,itemView);
             this.imageClickListiner=imageClickListiner;
         }
-        public void bindImage(Image image){
+        public void bindVideo(Video video){
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w500"+image.getFile_path())
+                    .load("http://img.youtube.com/vi/"+video.getKey()+"/mqdefault.jpg")
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(imageView);
-            imageView.setOnClickListener(v->imageClickListiner.OnElementClick(image.getFile_path()));
+            imageView.setOnClickListener(v->imageClickListiner.OnElementClick(video.getKey()));
         }
     }
 }

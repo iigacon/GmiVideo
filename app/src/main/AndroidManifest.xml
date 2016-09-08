@@ -29,7 +29,9 @@
             <!-- android:resource="@xml/searchable" /> -->
         </activity>
         <activity android:name=".view.activity.PlayerViewDemoActivity" />
-        <activity android:name=".view.activity.ImageShowActivity"></activity>
+        <activity android:name=".view.activity.ImageShowActivity" />
+        <activity android:name=".view.activity.VideoShowActivity" />
+        <activity android:name=".view.activity.ImageFullActivity"></activity>
     </application>
 
 </manifest>
