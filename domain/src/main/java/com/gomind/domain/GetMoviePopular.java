@@ -14,27 +14,25 @@ import rx.Scheduler;
 public class GetMoviePopular extends UseCase<MoviePopular> {
     private final Scheduler mUiThread;
     private final Scheduler mExecutorThread;
-    private int page;
+    private int page=1;
     private final Movies movies;
 
     @Inject
-    public GetMoviePopular(int page, Movies movies,
+    public GetMoviePopular(Movies movies,
                            @Named("ui_thread") Scheduler uiThread,
                            @Named("executor_thread") Scheduler executorThread) {
         this.mUiThread = uiThread;
         this.mExecutorThread = executorThread;
-        this.page=page;
         this.movies=movies;
     }
 
     @Override
     public Observable<MoviePopular> buildObserable() {
-        increasePage();
         return movies.moviePopulars(page)
                 .observeOn(mUiThread)
                 .subscribeOn(mExecutorThread);
     }
-    public void increasePage(){
-        page+=1;
+    public void setPage(int page){
+        this.page=page;
     }
 }

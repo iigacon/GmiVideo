@@ -1,4 +1,4 @@
-package com.gomind.gmivideo.Injector;
+package com.gomind.gmivideo.Injector.Scope;
 
 import java.lang.annotation.Retention;
 

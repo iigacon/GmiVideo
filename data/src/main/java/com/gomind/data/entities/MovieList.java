@@ -70,4 +70,20 @@ public class MovieList {
     public void setPoster_path(String poster_path) {
         this.poster_path = poster_path;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getFavorite_count() {
+        return favorite_count;
+    }
+
+    public void setFavorite_count(int favorite_count) {
+        this.favorite_count = favorite_count;
+    }
 }

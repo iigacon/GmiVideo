@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "665278328500",
+    "firebase_url": "https://gmivideo-ca395.firebaseio.com",
+    "project_id": "gmivideo-ca395",
+    "storage_bucket": "gmivideo-ca395.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665278328500:android:a35df944cd7c6c3c",
+        "android_client_info": {
+          "package_name": "com.gomind.gmivideo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665278328500-8tvaovl5sdg5s2lgrindbibp5b0ff6mn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gomind.gmivideo",
+            "certificate_hash": "F8463E151AB48222251B0B8C63A87D0B71A1BC63"
+          }
+        },
+        {
+          "client_id": "665278328500-phf5vhelppqar7l8uctjdtuq95o8hs53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAlUGBtXHb2-DMgNEFBAjZkFkHjkwW_Go"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665278328500-phf5vhelppqar7l8uctjdtuq95o8hs53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -28,7 +28,7 @@ public class MovieSimilarPresenter implements Presenter {
 
     @Override
     public void onStop() {
-
+        mMovieSimilar.unsubscribe();
     }
 
     @Override
@@ -45,6 +45,12 @@ public class MovieSimilarPresenter implements Presenter {
     public void onCreate() {
         mMovieSimilar=getMovieSimilar.execute().subscribe(this::onMovieSimilarReceived,this::onError);
     }
+
+    @Override
+    public void loadMore() {
+
+    }
+
     public void onMovieSimilarReceived(MovieSimilars movieSimilars){
         movieDetailView.bindMovieSimilar(movieSimilars.getResults());
     }

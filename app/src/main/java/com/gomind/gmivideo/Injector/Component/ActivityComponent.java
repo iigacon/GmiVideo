@@ -2,7 +2,7 @@ package com.gomind.gmivideo.Injector.Component;
 
 import android.content.Context;
 
-import com.gomind.gmivideo.Injector.Activity;
+import com.gomind.gmivideo.Injector.Scope.Activity;
 import com.gomind.gmivideo.Injector.Module.ActivityModule;
 
 import dagger.Component;

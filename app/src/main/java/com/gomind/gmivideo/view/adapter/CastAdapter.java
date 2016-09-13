@@ -59,19 +59,17 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.MyViewHolder>{
            super(itemView);
            ButterKnife.bind(this,itemView);
 //           bindClick(itemView,recyclerCastClickListener);
-           thumbnail.setOnClickListener(v->recyclerCastClickListener.onElementClick(getPosition(),title,thumbnail));
-           title.setOnClickListener(v->recyclerCastClickListener.onElementClick(getPosition(),title,thumbnail));
+           thumbnail.setOnClickListener(v->recyclerCastClickListener.onElementClick(casts.get(getPosition()).getId()));
+           title.setOnClickListener(v->recyclerCastClickListener.onElementClick(casts.get(getPosition()).getId()));
        }
         public void bindCastCard(Cast cast){
             title.setText(cast.getName()+"\n("+cast.getCharacter()+")");
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w500"+cast.getProfile_path())
+                    .load("http://image.tmdb.org/t/p/w300"+cast.getProfile_path())
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(thumbnail);
         }
-        public void bindClick(View itemView, RecyclerCastClickListener recyclerCastClickListener){
-            itemView.setOnClickListener(v -> recyclerCastClickListener.onElementClick(getPosition(),title,thumbnail));
-        }
+
    }
 }

@@ -5,6 +5,7 @@
     <dimen name="insets">2dp</dimen>
     <dimen name="elevation_normal">5dp</dimen>
     <dimen name="detail_backdrop_height">285dp</dimen>
+    <dimen name="detail_people_height">400dp</dimen>
     <dimen name="card_margin">5dp</dimen>
     <dimen name="fab_margin">5dp</dimen>
     <dimen name="list_item_avatar_size">40dp</dimen>

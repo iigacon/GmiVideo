@@ -27,6 +27,7 @@ public class ImageShowActivity extends AppCompatActivity {
     @BindView(R.id.grid_image)
     RecyclerView grid_image;
     private List<Image> images;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

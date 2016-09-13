@@ -15,4 +15,6 @@ public interface Presenter {
     void attachView (View v);
 
     void onCreate();
+
+    void loadMore();
 }

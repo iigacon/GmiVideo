@@ -45,6 +45,12 @@ public class MovieDetailPresenter implements Presenter {
     public void onCreate() {
         mMovieDetail=getMovieDetail.execute().subscribe(this::onMovieDetailReceived, this::onErrorMovieDetail);
     }
+
+    @Override
+    public void loadMore() {
+
+    }
+
     public void onMovieDetailReceived(MovieDetail movieDetail){
         movieDetailView.bindMovieDetail(movieDetail);
     }

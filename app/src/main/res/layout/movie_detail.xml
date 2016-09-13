@@ -28,19 +28,6 @@
             app:expandedTitleMarginEnd="10dp"
             app:title=""
             >
-        <!--<net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout-->
-            <!--android:id="@+id/collapsing_toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--app:layout_scrollFlags="scroll|exitUntilCollapsed"-->
-            <!--android:fitsSystemWindows="true"-->
-            <!--app:contentScrim="?attr/colorPrimary"-->
-            <!--app:collapsedTitleTextAppearance="@style/TextAppearance.MyApp.Title.Collapsed"-->
-            <!--app:expandedTitleTextAppearance="@style/TextAppearance.MyApp.Title.Expanded"-->
-            <!--app:expandedTitleMarginStart="10dp"-->
-            <!--app:expandedTitleMarginBottom="10dp"-->
-            <!--app:expandedTitleMarginEnd="10dp"-->
-            <!--app:maxLines="3">-->
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
@@ -371,6 +358,26 @@
                         tools:listitem="@layout/movie_cast_item"
                         />
 
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginBottom="@dimen/card_margin">
+
+                <LinearLayout
+                    style="@style/Widget.CardContentMod"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/review"
+                        android:paddingLeft="16dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/review"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        />
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

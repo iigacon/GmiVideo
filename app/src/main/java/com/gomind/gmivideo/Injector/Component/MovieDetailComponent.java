@@ -1,6 +1,6 @@
 package com.gomind.gmivideo.Injector.Component;
 
-import com.gomind.gmivideo.Injector.Activity;
+import com.gomind.gmivideo.Injector.Scope.Activity;
 import com.gomind.gmivideo.Injector.Module.ActivityModule;
 import com.gomind.gmivideo.Injector.Module.MovieCreditModule;
 import com.gomind.gmivideo.Injector.Module.MovieDetailModule;

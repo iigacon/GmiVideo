@@ -1,6 +1,7 @@
 package com.gomind.gmivideo.view.ulti;
 
-import com.gomind.data.entities.Image;
+
+import com.gomind.gmivideo.view.activity.Image;
 
 import java.util.List;
 

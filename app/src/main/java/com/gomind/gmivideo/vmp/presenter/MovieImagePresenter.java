@@ -45,6 +45,12 @@ public class MovieImagePresenter implements Presenter {
     public void onCreate() {
         mMovieImage=getMovieImage.execute().subscribe(this::onMovieImageReceived,this::onError);
     }
+
+    @Override
+    public void loadMore() {
+
+    }
+
     public void onMovieImageReceived(Images images){
         movieDetailView.bindMovieImage(images.getBackdrops());
     }

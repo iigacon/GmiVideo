@@ -5,7 +5,7 @@ import android.app.Application;
 import com.gomind.gmivideo.Injector.Component.AppComponent;
 import com.gomind.gmivideo.Injector.Component.DaggerAppComponent;
 import com.gomind.gmivideo.Injector.Module.AppModule;
-import com.gomind.gmivideo.Injector.Module.ConfigurationModule;
+
 
 
 public class GmiVideoApplication extends Application {
@@ -20,7 +20,6 @@ public class GmiVideoApplication extends Application {
     private void initializeInjector() {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .configurationModule(new ConfigurationModule())
                 .build();
     }
 

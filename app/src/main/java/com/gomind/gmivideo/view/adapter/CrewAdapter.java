@@ -60,13 +60,14 @@ public class CrewAdapter extends RecyclerView.Adapter<CrewAdapter.MyViewHolder>{
         public void bindCrewCard(Crew crew){
             title.setText(crew.getName()+"\n("+crew.getJob()+")");
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w500"+crew.getProfile_path())
+                    .load("http://image.tmdb.org/t/p/w300"+crew.getProfile_path())
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(thumbnail);
         }
         public void bindClick(View itemView, RecyclerCrewClickListener crewClickListener){
-            itemView.setOnClickListener(v -> crewClickListener.onElementClick(getPosition(),crews.get(getPosition()).getId()));
+            itemView.setOnClickListener(v -> crewClickListener.onElementClick(crews.get(getPosition()).getId()));
+            thumbnail.setOnClickListener(v -> crewClickListener.onElementClick(crews.get(getPosition()).getId()));
         }
    }
 }

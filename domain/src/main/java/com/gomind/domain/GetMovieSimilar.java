@@ -17,26 +17,25 @@ public class GetMovieSimilar extends UseCase<MovieSimilars>{
     private Scheduler uiThread;
     private Scheduler executetorThread;
     private Movies movies;
-    private int page;
+    private int page=1;
     @Inject
-    public GetMovieSimilar(String idMovie,int page, Movies movies,
+    public GetMovieSimilar(String idMovie, Movies movies,
                            @Named("ui_thread") Scheduler uiThread,
                            @Named("executor_thread") Scheduler executetorThread) {
         this.idMovie = idMovie;
         this.uiThread = uiThread;
         this.executetorThread = executetorThread;
         this.movies = movies;
-        this.page=page;
     }
 
     @Override
     public Observable<MovieSimilars> buildObserable() {
-        increasePage();
         return movies.movieSimilars(idMovie, page)
                 .observeOn(uiThread)
                 .subscribeOn(executetorThread);
     }
-    private void increasePage(){
-        page+=1;
+    private void setPage(int page){
+        this.page=page;
     }
+
 }

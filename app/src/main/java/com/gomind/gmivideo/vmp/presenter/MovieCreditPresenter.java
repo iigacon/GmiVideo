@@ -28,7 +28,7 @@ public class MovieCreditPresenter implements Presenter{
 
     @Override
     public void onStop() {
-
+        mMovieCredit.unsubscribe();
     }
 
     @Override
@@ -45,6 +45,12 @@ public class MovieCreditPresenter implements Presenter{
     public void onCreate() {
         mMovieCredit=getMovieCredit.execute().subscribe(this::onMovieCreditReceived,this::onError);
     }
+
+    @Override
+    public void loadMore() {
+
+    }
+
     public void onMovieCreditReceived(Credits credits){
         movieDetailView.bindCreditMovie(credits);
     }

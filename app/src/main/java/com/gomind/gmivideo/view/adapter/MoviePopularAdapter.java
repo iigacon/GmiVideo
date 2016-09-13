@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.gomind.data.entities.Movie;
 import com.gomind.gmivideo.R;
 import com.gomind.gmivideo.vmp.ulti.RecyclerClickListener;
@@ -22,8 +22,10 @@ import butterknife.ButterKnife;
 public class MoviePopularAdapter extends RecyclerView.Adapter<MoviePopularAdapter.MoviePopularViewHolder>{
     private List<Movie> movies;
     private Context context;
+    private final RequestManager glide;
     private RecyclerClickListener recyclerClickListener;
-    public MoviePopularAdapter(List<Movie> movies, Context context, RecyclerClickListener recyclerClickListener) {
+    public MoviePopularAdapter(RequestManager glide,List<Movie> movies, Context context, RecyclerClickListener recyclerClickListener) {
+        this.glide=glide;
         this.movies = movies;
         this.context = context;
         this.recyclerClickListener = recyclerClickListener;
@@ -37,7 +39,7 @@ public class MoviePopularAdapter extends RecyclerView.Adapter<MoviePopularAdapte
 
     @Override
     public void onBindViewHolder(MoviePopularViewHolder holder, int position) {
-        holder.binMoviePopular(movies.get(position));
+        holder.binMoviePopular(glide,movies.get(position));
     }
 
     @Override
@@ -59,10 +61,9 @@ public class MoviePopularAdapter extends RecyclerView.Adapter<MoviePopularAdapte
             ButterKnife.bind(this, itemView);
             bindListener(itemView, recyclerClickListener);
         }
-        public void binMoviePopular(Movie movie){
+        public void binMoviePopular(RequestManager glide,Movie movie){
             avengerTitleTextView.setText(movie.getOriginal_title());
-            Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w500"+movie.getBackdrop_path())
+            glide.load("http://image.tmdb.org/t/p/w500"+movie.getBackdrop_path())
                     .crossFade()
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)

@@ -68,7 +68,7 @@ public class MovieSimilarAdapter extends RecyclerView.Adapter<MovieSimilarAdapte
         public void bindCrewCard(MovieSimilar movieSimilar){
             title.setText(movieSimilar.getTitle());
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w500"+movieSimilar.getPoster_path())
+                    .load("http://image.tmdb.org/t/p/w300"+movieSimilar.getPoster_path())
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(poster);

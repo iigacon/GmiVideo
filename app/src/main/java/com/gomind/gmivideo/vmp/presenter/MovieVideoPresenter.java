@@ -45,6 +45,11 @@ public class MovieVideoPresenter implements Presenter {
     public void onCreate() {
         subscription=getMovieVideo.execute().subscribe(this::onMovieVideoReceived,this::onError);
     }
+
+    @Override
+    public void loadMore() {
+    }
+
     public void onMovieVideoReceived(Videos videos){
         movieDetailView.playYoutubeTrailer(videos.getResults());
     }
