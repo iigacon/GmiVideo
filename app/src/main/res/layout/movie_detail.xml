@@ -21,11 +21,6 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.MyApp.Title.Collapsed"
-            app:expandedTitleTextAppearance="@style/TextAppearance.MyApp.Title.Expanded"
-            app:expandedTitleMarginStart="10dp"
-            app:expandedTitleMarginBottom="10dp"
-            app:expandedTitleMarginEnd="10dp"
             app:title=""
             >
             <android.support.v4.view.ViewPager

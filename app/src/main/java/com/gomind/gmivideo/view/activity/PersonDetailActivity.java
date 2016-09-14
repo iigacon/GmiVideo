@@ -1,11 +1,14 @@
 package com.gomind.gmivideo.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,6 +140,19 @@ public class PersonDetailActivity extends AppCompatActivity implements PersonDet
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
+        SearchView searchView= (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchPersonActivity.start(getBaseContext(),query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return true;
     }
 
@@ -149,5 +165,10 @@ public class PersonDetailActivity extends AppCompatActivity implements PersonDet
             }
             default:return false;
         }
+    }
+    public static void start(Context context, String id){
+        Intent intent=new Intent(context, PersonDetailActivity.class);
+        intent.putExtra("person.id", id);
+        context.startActivity(intent);
     }
 }

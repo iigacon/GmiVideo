@@ -73,4 +73,7 @@ public interface MovieApi {
 
     @GET("/3/person/{id}/images")
     Observable<ImagePersons> getImagePerson(@Path("id")String id, @Query("api_key")String api_key);
+
+    @GET("/3/search/person")
+    Observable<PersonPopulars> searchPerson(@Query("api_key")String api_key, @Query("query") String query, @Query("page") int page);
 }

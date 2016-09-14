@@ -66,7 +66,7 @@ public class PersonPopularAdapter extends RecyclerView.Adapter<PersonPopularAdap
         public void bindCrewCard(PersonPopular personPopular){
             name.setText(personPopular.getName());
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w300"+personPopular.getProfile_path())
+                    .load("http://image.tmdb.org/t/p/w185"+personPopular.getProfile_path())
                     .placeholder(R.drawable.header)
                     .error(R.drawable.header)
                     .into(profile);

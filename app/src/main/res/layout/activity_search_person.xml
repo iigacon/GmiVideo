@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gomind.gmivideo.view.activity.SearchMovieActivity">
+    tools:context=".view.activity.SearchPersonActivity">
     <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:local="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar_search_movie"
+        android:id="@+id/toolbar_search_person"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -14,8 +14,8 @@
         local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         local:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/toolbar_search_movie"
-        android:id="@+id/recycler_movie"
+        android:layout_below="@+id/toolbar_search_person"
+        android:id="@+id/recycler_person"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

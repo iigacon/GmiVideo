@@ -160,5 +160,10 @@ public class MovieDataRepository implements Movies {
         return movieApi.getImagePerson(id, API_KEY);
     }
 
+    @Override
+    public Observable<PersonPopulars> searchPerson(String query, int page) {
+        return movieApi.searchPerson(API_KEY, query, page);
+    }
+
 
 }

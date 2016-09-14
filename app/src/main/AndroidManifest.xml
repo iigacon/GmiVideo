@@ -12,15 +12,16 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <!--<service android:name=".YourFirebaseMessagingService">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+
+        <!-- <service android:name=".YourFirebaseMessagingService"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.google.firebase.MESSAGING_EVENT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </service> -->
         <activity
             android:name=".view.activity.MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +41,8 @@
         <activity android:name=".view.activity.VideoShowActivity" />
         <activity android:name=".view.activity.PersonDetailActivity" />
         <activity android:name=".view.activity.ReviewActivity" />
-        <activity android:name=".view.activity.SearchActivity"/>
+        <activity android:name=".view.activity.SearchMovieActivity" />
+        <activity android:name=".view.activity.SearchPersonActivity"></activity>
     </application>
 
 </manifest>

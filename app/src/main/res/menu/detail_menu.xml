@@ -3,11 +3,10 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
-        android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
         android:title="search"
+        android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
         app:showAsAction="collapseActionView|ifRoom"
         app:actionViewClass="android.support.v7.widget.SearchView" />
-    />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/share"

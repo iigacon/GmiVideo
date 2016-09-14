@@ -51,4 +51,5 @@ public interface Movies {
     Observable<Person> getPerson(String id);
     Observable<PersonMovieCredits> getMovieCastPerson(String id);
     Observable<ImagePersons> getImagePerson(String id);
+    Observable<PersonPopulars> searchPerson(String query, int page);
 }

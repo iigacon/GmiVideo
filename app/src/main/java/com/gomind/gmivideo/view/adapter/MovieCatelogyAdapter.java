@@ -68,7 +68,7 @@ public class MovieCatelogyAdapter extends RecyclerView.Adapter<MovieCatelogyAdap
         public void bindCastCard(Movie movie){
 //            title.setText(movie.getTitle());
             Glide.with(context)
-                    .load("http://image.tmdb.org/t/p/w300"+movie.getPoster_path())
+                    .load("http://image.tmdb.org/t/p/w185"+movie.getPoster_path())
                     .error(R.drawable.header)
                     .into(poster);
         }

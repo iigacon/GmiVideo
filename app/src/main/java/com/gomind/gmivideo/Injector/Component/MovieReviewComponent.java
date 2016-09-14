@@ -7,9 +7,7 @@ import com.gomind.gmivideo.view.activity.ReviewActivity;
 
 import dagger.Component;
 
-/**
- * Created by Duc on 9/8/16.
- */
+
 @Activity
 @Component(dependencies = AppComponent.class, modules = {ActivityModule.class, MovieReViewModule.class})
 public interface MovieReviewComponent {
