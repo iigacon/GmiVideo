@@ -68,4 +68,9 @@
         <!-- Layout for query suggestion rows -->
         <!--<item name="suggestionRowLayout">...</item>-->
     </style>
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/md_white_1000</item>
+        <item name="android:textColorPrimary">@color/iron</item>
+        <item name="android:background">@color/primary</item>
+    </style>
 </resources>

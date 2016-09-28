@@ -27,8 +27,8 @@
                 android:contentDescription="jadh" />
             <ImageView
                 android:id="@+id/similar_add_favorite"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@drawable/attach_favorite"/>
 
 

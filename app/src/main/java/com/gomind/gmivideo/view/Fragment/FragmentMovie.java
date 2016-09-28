@@ -22,36 +22,30 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by Duc on 9/9/16.
- */
+
 public abstract class FragmentMovie extends Fragment implements MovieBaseView {
     private MovieCatelogyAdapter movieAdapter;
     protected String idMovie;
     @BindView(R.id.recycler_movie_catelogy)
     RecyclerView recyclerView;
     protected Presenter presenter;
-//    @Inject
-//    MovieGenrePresenter moviePresenter;
-
-//    public static FragmentMovie newInstance(String id_catelogy) {
-//        FragmentMovie fragment = new FragmentMovie();
-//        Bundle args = new Bundle();
-//        args.putString("id", id_catelogy);
-//        fragment.setArguments(args);
-//        return fragment;
-//
-//    }
+    private boolean enableScroll=false;
+    protected View viewer;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_catelogy, container, false);
         ButterKnife.bind(this, view);
-//        idMovie = getArguments().getString("id");
+        viewer=view;
         initilizeInjector();
         presenter.attachView(this);
         presenter.onCreate();
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setFitsSystemWindows(true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(mOnScrollListener);
         return view;
     }
 
@@ -63,18 +57,20 @@ public abstract class FragmentMovie extends Fragment implements MovieBaseView {
             if (idMovie != null) {
                 MovieDetailActivity.start(getActivity(), idMovie);
             }
+        },(id, imageView) -> {
+
         });
         recyclerView.setAdapter(movieAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setFitsSystemWindows(true);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addOnScrollListener(mOnScrollListener);
+        movieAdapter.notifyDataSetChanged();
+        enableScroll=true;
     }
 
     @Override
     public void bindLoadMore(int count) {
         movieAdapter.notifyItemRangeInserted(movieAdapter.getItemCount() + count, count);
+        if(count>0){
+            enableScroll=true;
+        }else enableScroll=false;
     }
 
     private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
@@ -84,9 +80,8 @@ public abstract class FragmentMovie extends Fragment implements MovieBaseView {
             int visiableItemsCount = layoutManager.getChildCount();
             int totalItemsCount = layoutManager.getItemCount();
             int firstVisiableItemPos = layoutManager.findFirstVisibleItemPosition();
-            if ((visiableItemsCount + firstVisiableItemPos + 16) >= totalItemsCount) {
+            if ((visiableItemsCount + firstVisiableItemPos + 16) >= totalItemsCount & enableScroll) {
                 presenter.loadMore();
-                System.out.println("load More");
             }
         }
     };

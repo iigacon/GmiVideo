@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -30,6 +31,7 @@ import com.gomind.data.entities.Genres;
 import com.gomind.data.entities.Image;
 import com.gomind.data.entities.MovieDetail;
 import com.gomind.data.entities.MovieSimilar;
+import com.gomind.data.entities.PostWatchList;
 import com.gomind.data.entities.Video;
 import com.gomind.gmivideo.GmiVideoApplication;
 import com.gomind.gmivideo.Injector.Component.DaggerMovieDetailComponent;
@@ -39,6 +41,7 @@ import com.gomind.gmivideo.Injector.Module.MovieDetailModule;
 import com.gomind.gmivideo.Injector.Module.MovieImageModule;
 import com.gomind.gmivideo.Injector.Module.MovieSimilarModule;
 import com.gomind.gmivideo.Injector.Module.MovieVideoModule;
+import com.gomind.gmivideo.Injector.Module.PostWatchListModule;
 import com.gomind.gmivideo.R;
 import com.gomind.gmivideo.mapper.MapperData;
 import com.gomind.gmivideo.view.Fragment.FragmentMovieImage;
@@ -46,11 +49,15 @@ import com.gomind.gmivideo.view.adapter.CastAdapter;
 import com.gomind.gmivideo.view.adapter.CrewAdapter;
 import com.gomind.gmivideo.view.adapter.MovieSimilarAdapter;
 import com.gomind.gmivideo.view.ulti.MessageDetailCreated;
+import com.gomind.gmivideo.view.ulti.WatchlistMovie;
+import com.gomind.gmivideo.view.ulti.ultils;
 import com.gomind.gmivideo.vmp.presenter.MovieCreditPresenter;
 import com.gomind.gmivideo.vmp.presenter.MovieDetailPresenter;
 import com.gomind.gmivideo.vmp.presenter.MovieImagePresenter;
 import com.gomind.gmivideo.vmp.presenter.MovieSimilarPresenter;
 import com.gomind.gmivideo.vmp.presenter.MovieVideoPresenter;
+import com.gomind.gmivideo.vmp.presenter.PostWatchListPresenter;
+import com.gomind.gmivideo.vmp.ulti.AccountStatus;
 import com.gomind.gmivideo.vmp.view.MovieDetailView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -66,6 +73,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
     private String idMovie;
@@ -79,7 +87,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     MovieVideoPresenter movieVideoPresenter;
     @Inject
     MovieCreditPresenter movieCreditPresenter;
-
+    @Inject
+    PostWatchListPresenter postWatchListPresenter;
     @BindView(R.id.movie_info)
     TextView movie_info;
 
@@ -149,6 +158,23 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @BindView(R.id.review)
     TextView review_button;
 
+
+    @OnClick(R.id.float_favoriteplus)
+    void addWatchList(){
+        postWatchListPresenter.setMedia_id(idMovie);
+        postWatchListPresenter.onCreate();
+        if(!WatchlistMovie.check(idMovie)) {
+            floatingActionButton.setImageResource(R.drawable.bookmark_check);
+            WatchlistMovie.add(idMovie);
+        }
+        else{
+            floatingActionButton.setImageResource(R.drawable.favoriteplus);
+            WatchlistMovie.remove(idMovie);
+        }
+    }
+    @BindView(R.id.float_favoriteplus)
+    FloatingActionButton floatingActionButton;
+
     MovieSimilarAdapter similarAdapter;
     CastAdapter castAdapter;
     CrewAdapter crewAdapter;
@@ -165,7 +191,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     public void onEvent(MessageDetailCreated message) {
         if (!message.getUUID().equals(currentId)) {
             count_create += 1;
-            System.out.println("count: " + count_create);
         }
         if (count_create >= 4) {
             finish();
@@ -202,6 +227,12 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 startActivity(intent);
             }
         });
+        if(WatchlistMovie.check(idMovie)) {
+            floatingActionButton.setImageResource(R.drawable.bookmark_check);
+        }
+        else{
+            floatingActionButton.setImageResource(R.drawable.favoriteplus);
+        }
     }
 
     public void play() {
@@ -232,6 +263,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
                 .movieSimilarModule(new MovieSimilarModule(idMovie))
                 .movieVideoModule(new MovieVideoModule(idMovie))
                 .movieCreditModule(new MovieCreditModule(idMovie))
+                .postWatchListModule(new PostWatchListModule())
                 .build().inject(this);
         movieDetailPresenter.attachView(this);
         movieDetailPresenter.onCreate();
@@ -243,6 +275,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         movieVideoPresenter.onCreate();
         movieCreditPresenter.attachView(this);
         movieCreditPresenter.onCreate();
+        postWatchListPresenter.attachView(this);
+        postWatchListPresenter.setId(AccountStatus.user_id);
+        postWatchListPresenter.setSession_id(AccountStatus.session_id);
     }
 
     @Override
@@ -255,8 +290,8 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         movie_info.setText(movieDetail.getOverview());
 
         rate.setText(String.valueOf(movieDetail.getVote_average()) + "/10\n" + String.valueOf(movieDetail.getVote_count()));
-        runtime.setText("Runtime\n" + String.valueOf(movieDetail.getRuntime()) + " min");
-        review.setText("Release Date\n" + String.valueOf(movieDetail.getRelease_date()));
+        runtime.setText("Runtime\n" + ultils.convertHour(movieDetail.getRuntime()));
+        review.setText("Release Date\n" + ultils.convertDate(movieDetail.getRelease_date()));
         String genre = "";
 
         movie_tagline.setText(movieDetail.getTagline());
@@ -276,10 +311,22 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
         }
         company.setText(companyString);
     }
-
+    private boolean currentFavorite;
+    private String currentIdMovie;
     @Override
     public void bindMovieSimilar(List<MovieSimilar> movieSimilars) {
-        similarAdapter = new MovieSimilarAdapter(movieSimilars, this, ((position, idMovie1) -> MovieDetailActivity.start(this, idMovie1)));
+        similarAdapter = new MovieSimilarAdapter(movieSimilars, this, ((position, idMovie1) -> MovieDetailActivity.start(this, idMovie1)),(id, imageView) -> {
+            currentIdMovie=id;
+            if(WatchlistMovie.check(id)){
+                currentFavorite=true;
+                postWatchListPresenter.setWatchlist(false);
+            }else{
+                postWatchListPresenter.setWatchlist(true);
+                currentFavorite=false;
+            }
+            postWatchListPresenter.setMedia_id(id);
+            postWatchListPresenter.onCreate();
+        });
         recyclerView_Similar.setAdapter(similarAdapter);
         recyclerView_Similar.setLayoutManager(layoutManager3);
     }
@@ -348,6 +395,19 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     @Override
     public void imageMovie(String idMovie) {
 
+    }
+
+    @Override
+    public void bindPostWatchList(PostWatchList postWatchList) {
+        if(postWatchList.getStatus_code()==1){
+            if(currentFavorite){
+                WatchlistMovie.remove(currentIdMovie);
+                Toast.makeText(MovieDetailActivity.this, "Watchlist removed!", Toast.LENGTH_SHORT).show();
+            }else {
+                WatchlistMovie.add(currentIdMovie);
+                Toast.makeText(MovieDetailActivity.this, "Watchlist added!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     static class Adapter extends FragmentPagerAdapter {

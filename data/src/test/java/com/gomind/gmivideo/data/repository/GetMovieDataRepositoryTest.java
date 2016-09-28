@@ -15,9 +15,7 @@ import rx.Observable;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-/**
- * Created by Duc on 8/28/16.
- */
+
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 23,manifest=Config.NONE)
 public class GetMovieDataRepositoryTest {

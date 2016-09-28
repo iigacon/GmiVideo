@@ -5,13 +5,13 @@ import org.parceler.ParcelConstructor;
 
 @Parcel
 public class Video {
-    private String id;
-    private String iso_639_1;
-    private String key;
-    private String name;
-    private String site;
-    private int size;
-    private String type;
+    public String id;
+    public String iso_639_1;
+    public String key;
+    public String name;
+    public String site;
+    public int size;
+    public String type;
     @ParcelConstructor
     public Video(String id, String iso_639_1, String key, String name, String site, int size, String type) {
         this.id = id;

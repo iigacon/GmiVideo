@@ -1,6 +1,8 @@
 package com.gomind.gmivideo.view.activity;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,13 +12,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.gomind.data.entities.Account;
 import com.gomind.data.entities.MovieList;
 import com.gomind.gmivideo.GmiVideoApplication;
 import com.gomind.gmivideo.Injector.Component.DaggerMovieCatelogyComponent;
+import com.gomind.gmivideo.Injector.Module.AccountModule;
 import com.gomind.gmivideo.Injector.Module.ActivityModule;
 import com.gomind.gmivideo.Injector.Module.MovieCatelogyModule;
 import com.gomind.gmivideo.R;
@@ -26,7 +29,9 @@ import com.gomind.gmivideo.view.Fragment.FragmentMoviePopular;
 import com.gomind.gmivideo.view.Fragment.FragmentMovieTopRate;
 import com.gomind.gmivideo.view.Fragment.FragmentMovieUpComing;
 import com.gomind.gmivideo.view.Fragment.FragmentPersonPopular;
+import com.gomind.gmivideo.view.Fragment.FragmentWatchListMovie;
 import com.gomind.gmivideo.vmp.presenter.MovieCatelogyPresenter;
+import com.gomind.gmivideo.vmp.ulti.AccountStatus;
 import com.gomind.gmivideo.vmp.view.MovieCatelogyView;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -35,6 +40,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -56,12 +62,16 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
     Toolbar toolbar;
 
     private List<MovieList> movieLists;
+    private AccountHeader headerResult;
+    private String session_id;
+    private String user_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        session_id=getIntent().getStringExtra("session_id");
         new DrawerBuilder().withActivity(this).build();
         setSupportActionBar(toolbar);
         if(getSupportActionBar()!=null){
@@ -69,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         initializeDependencyInjector();
-        AccountHeader headerResult = new AccountHeaderBuilder()
+        headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.navigation)
                 .build();
@@ -109,6 +119,10 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
                             getSupportActionBar().setTitle("Peoples");
                             newFragment=new FragmentPersonPopular();
                             break;
+                        }
+                        case 7:{
+                            getSupportActionBar().setTitle("Watchlist");
+                            newFragment= FragmentWatchListMovie.newInstance(user_id, session_id);
                         }
                         default:
                             if(drawerItem.getIdentifier()>=100 &&drawerItem.getIdentifier()<200){
@@ -154,7 +168,9 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
                 .activityModule(new ActivityModule(this))
                 .appComponent(avengersApplication.getAppComponent())
                 .movieCatelogyModule(new MovieCatelogyModule())
+                .accountModule(new AccountModule())
                 .build().inject(this);
+        movieCatelogyPresenter.setSession_id(session_id);
         movieCatelogyPresenter.attachView(this);
         movieCatelogyPresenter.onCreate();
     }
@@ -173,7 +189,15 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
         drawer.addItem(new ExpandableDrawerItem().withName("Catelogies").withTextColor(Color.WHITE).withSelectable(false).withSubItems(drawerItemsCatelogy).withArrowColor(Color.WHITE));
         drawer.addItem(new DividerDrawerItem());
         drawer.addItem(new PrimaryDrawerItem().withIdentifier(6).withName("Peoples").withTextColor(Color.parseColor("#ffffff")).withSelectedColor(Color.parseColor("#50c2c2c2")).withSelectedTextColor(Color.YELLOW).withSelectedIconColor(Color.YELLOW));
+        drawer.addItem(new DividerDrawerItem());
+        drawer.addItem(new PrimaryDrawerItem().withIdentifier(7).withName("Watchlist").withTextColor(Color.parseColor("#ffffff")).withSelectedColor(Color.parseColor("#50c2c2c2")).withSelectedTextColor(Color.YELLOW).withSelectedIconColor(Color.YELLOW));
+    }
 
+    @Override
+    public void bindAccount(Account account) {
+        headerResult.addProfiles(new ProfileDrawerItem().withName(account.getUsername()));
+        user_id=account.getId();
+        AccountStatus.user_id=user_id;
     }
 
 
@@ -189,13 +213,11 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
                         SearchPersonActivity.start(getBaseContext(), query);
                     } else SearchMovieActivity.start(getBaseContext(), query);
                 }catch (Exception e){}
-                Log.e("action","search");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("text change",newText);
                 return false;
             }
         });
@@ -220,5 +242,10 @@ public class MainActivity extends AppCompatActivity implements MovieCatelogyView
         }else {
             super.onBackPressed();
         }
+    }
+    public static void start(Context context, String session_id){
+        Intent intent=new Intent(context, MainActivity.class);
+        intent.putExtra("session_id", session_id);
+        context.startActivity(intent);
     }
 }

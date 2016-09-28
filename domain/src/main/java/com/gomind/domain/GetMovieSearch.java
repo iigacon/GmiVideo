@@ -1,16 +1,20 @@
 package com.gomind.domain;
 
+import com.gomind.data.entities.Movie;
 import com.gomind.data.entities.MovieBase;
 import com.gomind.data.repository.Movies;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import rx.Observable;
 import rx.Scheduler;
+import rx.functions.Func1;
 
 
-public class GetMovieSearch extends UseCase<MovieBase> {
+public class GetMovieSearch extends UseCase<List<Movie>> {
     private String query="";
     private int page=1;
     private Movies movies;
@@ -27,11 +31,18 @@ public class GetMovieSearch extends UseCase<MovieBase> {
     }
 
     @Override
-    public Observable<MovieBase> buildObserable() {
+    public Observable<List<Movie>> buildObserable() {
         return movies.movieSearch(query, page)
+                .map(new Func1<MovieBase, List<Movie>>() {
+                    @Override
+                    public List<Movie> call(MovieBase movieBase) {
+                        return movieBase.getResults();
+                    }
+                })
                 .observeOn(uiThread)
                 .subscribeOn(executorThread);
     }
+
 
     public void setPage(int page) {
         this.page = page;

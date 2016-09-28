@@ -1,7 +1,9 @@
 package com.gomind.gmivideo.mapper;
 
 import com.gomind.data.entities.Image;
+import com.gomind.data.entities.Movie;
 import com.gomind.data.entities.Video;
+import com.gomind.data.entities.WatchListMovie;
 
 
 import java.util.ArrayList;
@@ -21,5 +23,12 @@ public class MapperData {
             videoList.add(new com.gomind.gmivideo.view.activity.Video(v.getId(),v.getIso_639_1(),v.getKey(),v.getName(),v.getSite(),v.getSize(),v.getType()));
         }
         return videoList;
+    }
+    public static List<Movie> MapperWatchListToMovie(List<WatchListMovie> watchListMovies){
+        List<Movie> movies=new ArrayList<>();
+        for(WatchListMovie w: watchListMovies){
+            movies.add(new Movie(false, w.getBackdrop_path(), null, w.getId(), "",w.getOriginal_title(),"", w.getRelease_date(), w.getPoster_path(), "", w.getTitle(), false, String.valueOf(w.getVote_average()), (int)w.getVote_count()));
+        }
+        return movies;
     }
 }

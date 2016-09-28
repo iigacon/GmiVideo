@@ -1,10 +1,12 @@
 package com.gomind.data.repository;
 
+import com.gomind.data.entities.Account;
 import com.gomind.data.entities.Account_states;
 import com.gomind.data.entities.Credits;
 import com.gomind.data.entities.ImagePersons;
 import com.gomind.data.entities.Images;
 import com.gomind.data.entities.Keyword;
+import com.gomind.data.entities.Login;
 import com.gomind.data.entities.MovieBase;
 import com.gomind.data.entities.MovieDetail;
 import com.gomind.data.entities.MovieLists;
@@ -13,11 +15,15 @@ import com.gomind.data.entities.MovieSimilars;
 import com.gomind.data.entities.Person;
 import com.gomind.data.entities.PersonMovieCredits;
 import com.gomind.data.entities.PersonPopulars;
+import com.gomind.data.entities.PostWatchList;
 import com.gomind.data.entities.Release_dates;
+import com.gomind.data.entities.RequestToken;
 import com.gomind.data.entities.Reviews;
+import com.gomind.data.entities.Session;
 import com.gomind.data.entities.Title;
 import com.gomind.data.entities.Translation;
 import com.gomind.data.entities.Videos;
+import com.gomind.data.entities.WatchListMovies;
 
 import java.util.List;
 
@@ -52,4 +58,10 @@ public interface Movies {
     Observable<PersonMovieCredits> getMovieCastPerson(String id);
     Observable<ImagePersons> getImagePerson(String id);
     Observable<PersonPopulars> searchPerson(String query, int page);
+    Observable<RequestToken> requestToken();
+    Observable<Login> login(String request_token, String username, String password);
+    Observable<Account> account(String session_id);
+    Observable<Session> getSession(String request_token);
+    Observable<WatchListMovies> watchListMovie(String session_id, String id, int page);
+    Observable<PostWatchList> postWatchList(String session_id, String id, String media_id, boolean watchlist);
 }

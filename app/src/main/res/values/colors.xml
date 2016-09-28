@@ -8,5 +8,5 @@
     <color name="brand_secondary">#ff2900</color>
     <color name="brand_accent">#ff441a</color>
     <color name="album_title">#4c4c4c</color>
-
+    <color name="iron">#CCCCCC</color>
 </resources>

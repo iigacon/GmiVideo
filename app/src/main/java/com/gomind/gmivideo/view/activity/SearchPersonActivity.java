@@ -42,15 +42,18 @@ public class SearchPersonActivity extends AppCompatActivity implements SearchPer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
+        query = getIntent().getStringExtra("search.query");
         initializeDependencyInjector(query);
         setSupportActionBar(toolbar);
-        try {
-            query = getIntent().getStringExtra("search.query");
-        }catch (Exception e){e.printStackTrace();}
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
+        GridLayoutManager layoutManager=new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setFitsSystemWindows(true);
+        recyclerView.addOnScrollListener(mOnScrollListener);
     }
     private void initializeDependencyInjector(String query) {
 
@@ -64,11 +67,6 @@ public class SearchPersonActivity extends AppCompatActivity implements SearchPer
             searchPersonPresenter.onQuery(query);
             searchPersonPresenter.attachView(this);
             searchPersonPresenter.onCreate();
-            GridLayoutManager layoutManager=new GridLayoutManager(this, 3);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setFitsSystemWindows(true);
-            recyclerView.addOnScrollListener(mOnScrollListener);
         }
     }
 
@@ -136,7 +134,7 @@ public class SearchPersonActivity extends AppCompatActivity implements SearchPer
     }
     public static void start(Context context, String query){
         Intent intent=new Intent(context, SearchPersonActivity.class);
-        intent.putExtra("person.id", query);
+        intent.putExtra("search.query", query);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

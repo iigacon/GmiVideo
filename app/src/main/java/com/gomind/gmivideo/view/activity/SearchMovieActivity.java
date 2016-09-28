@@ -32,7 +32,6 @@ public class SearchMovieActivity extends AppCompatActivity implements MovieBaseV
 
     @Inject
     SearchMoviePresenter searchMoviePresenter;
-    private String query;
     @BindView(R.id.recycler_movie)
     RecyclerView recyclerView;
     @BindView(R.id.toolbar_search_movie)
@@ -48,11 +47,13 @@ public class SearchMovieActivity extends AppCompatActivity implements MovieBaseV
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
-        try {
-            query = getIntent().getStringExtra("search.query");
-        }catch (Exception e){e.printStackTrace();}
+        String query = getIntent().getStringExtra("search.query");
         initializeDependencyInjector(query);
-
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setFitsSystemWindows(true);
+        recyclerView.addOnScrollListener(mOnScrollListener);
     }
     private void initializeDependencyInjector(String query) {
 
@@ -66,18 +67,13 @@ public class SearchMovieActivity extends AppCompatActivity implements MovieBaseV
             searchMoviePresenter.onQuery(query);
             searchMoviePresenter.attachView(this);
             searchMoviePresenter.onCreate();
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setFitsSystemWindows(true);
-            recyclerView.addOnScrollListener(mOnScrollListener);
         }
     }
 
 
     @Override
     public void bindMovieBase(List<Movie> movies) {
-        adapter=new MovieCatelogyAdapter(movies,this,(position, idMovie) -> MovieDetailActivity.start(this,idMovie));
+        adapter=new MovieCatelogyAdapter(movies,this,(position, idMovie) -> MovieDetailActivity.start(this,idMovie), (id, imageView) -> {});
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
@@ -100,7 +96,6 @@ public class SearchMovieActivity extends AppCompatActivity implements MovieBaseV
             int firstVisiableItemPos = layoutManager.findFirstVisibleItemPosition();
             if ((visiableItemsCount + firstVisiableItemPos + 16) >= totalItemsCount) {
                 searchMoviePresenter.loadMore();
-                System.out.println("load More");
             }
         }
     };

@@ -1,7 +1,6 @@
 package com.gomind.gmivideo.vmp.presenter;
 
 import com.gomind.data.entities.Movie;
-import com.gomind.data.entities.MovieBase;
 import com.gomind.domain.GetMovieSearch;
 import com.gomind.gmivideo.vmp.view.MovieBaseView;
 import com.gomind.gmivideo.vmp.view.View;
@@ -64,17 +63,17 @@ public class SearchMoviePresenter implements Presenter {
         getMovieSearch.setPage(++page);
         mMovieGenre=getMovieSearch.execute().subscribe(this::OnMovieGenreReceivedMore, this::OnError);
     }
-    public void OnMovieGenreReceived(MovieBase movieBase){
-        movies.addAll(movieBase.getResults());
+    public void OnMovieGenreReceived(List<Movie> movies){
+        movies.addAll(movies);
         movieBaseView.bindMovieBase(movies);
     }
     public void OnError(Throwable error){
         error.printStackTrace();
     }
 
-    public void OnMovieGenreReceivedMore(MovieBase movieBase){
-        movies.addAll(movieBase.getResults());
-        movieBaseView.bindLoadMore(movieBase.getTotal_results());
+    public void OnMovieGenreReceivedMore(List<Movie> movies){
+        movies.addAll(movies);
+        movieBaseView.bindLoadMore(movies.size());
     }
 
 }

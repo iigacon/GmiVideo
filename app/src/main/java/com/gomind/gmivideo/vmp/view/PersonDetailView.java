@@ -6,9 +6,7 @@ import com.gomind.data.entities.PersonMovieCredit;
 
 import java.util.List;
 
-/**
- * Created by Duc on 9/13/16.
- */
+
 public interface PersonDetailView extends View{
     void binPerson(Person person);
     void binMovieCastPerson(List<PersonMovieCredit> movieCredit);
